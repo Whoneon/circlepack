@@ -1,0 +1,8 @@
+# sdist: package, tests (with the synthetic parser fixture), top-level docs.
+# No record tables, benchmark data or campaign outputs.
+include CHANGELOG.md README.it.md
+include tests/conftest.py
+recursive-include tests/data *.html
+prune runs
+prune results
+global-exclude __pycache__ *.py[cod]

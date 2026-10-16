@@ -1,0 +1,362 @@
+# Weekend campaign (~60 h on an 8-core/16-thread laptop, adaptive 8..12 workers).
+# Launch:  scripts/run_campaign.sh start campaigns/weekend.toml
+# Status:  scripts/run_campaign.sh status runs/weekend
+# Stop:    scripts/run_campaign.sh stop runs/weekend
+# Estimate: python -m circlepack campaign plan campaigns/weekend.toml
+# Relative paths below are resolved against the directory of this file.
+# Packomania references come from the records cache: run `circlepack records fetch` first.
+
+[campaign]
+name = "weekend"
+dir = "../runs/weekend"           # <repo>/runs/weekend (git-ignored); or pass --dir
+unit_seconds = 300                # ~5 min per unit (sized from measured s/start)
+min_workers = 8                   # workers run at nice 15 + ionice idle, so they only take spare CPU
+max_workers = 12
+reserve_cpus = 2                  # target = clamp(cpu_count - 2 - round(foreign load), 8, 12)
+min_mem_gib = 2.0
+nice = 15
+report_every = 900                # REPORT.md every 15 min
+priority_lag = 2.0                # P1 targets get 2 rounds before P2 starts, etc.
+
+[references]
+# Both keys are optional.
+# packomania_dir: directory of <code>.csv tables (columns n,radius) that override
+#   the records cache table by table.
+# mj_manifest: MANIFEST.csv of github.com/Hashirama1337s/moki-julio-circle-packing.
+#   Without it there is no Moki & Julio reference: `skip_mj` has no effect and the
+#   `only_mj` jobs (P4 below) select no targets.
+# packomania_dir = "path/to/packomania-csv"
+# mj_manifest = "path/to/moki-julio-circle-packing/MANIFEST.csv"
+
+# ---- P1: regular polygons without Moki & Julio entries (Packomania tables end at n = 48)
+[[job]]
+name = "P1-polygons"
+table = "chp"
+n = "10-max"
+priority = 1
+starts = 800
+skip_mj = true
+[[job]]
+name = "P1-polygons"
+table = "cno"
+n = "10-max"
+priority = 1
+starts = 800
+skip_mj = true
+[[job]]
+name = "P1-polygons"
+table = "cdc"
+n = "10-max"
+priority = 1
+starts = 800
+skip_mj = true
+[[job]]
+name = "P1-polygons"
+table = "chd"
+n = "10-max"
+priority = 1
+starts = 800
+skip_mj = true
+[[job]]
+name = "P1-polygons"
+table = "cdd"
+n = "10-max"
+priority = 1
+starts = 800
+skip_mj = true
+[[job]]
+name = "P1-polygons"
+table = "ctd"
+n = "10-max"
+priority = 1
+starts = 800
+skip_mj = true
+[[job]]
+name = "P1-polygons"
+table = "crd"
+n = "10-max"
+priority = 1
+starts = 800
+skip_mj = true
+[[job]]
+name = "P1-polygons"
+table = "ced"
+n = "10-max"
+priority = 1
+starts = 800
+skip_mj = true
+
+[[job]]
+name = "P2-small-n"
+table = "crc_100"
+n = "10-80"
+priority = 2
+starts = 600
+skip_mj = true
+
+[[job]]
+name = "P2-small-n"
+table = "crc_200"
+n = "10-80"
+priority = 2
+starts = 600
+skip_mj = true
+
+[[job]]
+name = "P2-small-n"
+table = "crc_300"
+n = "10-80"
+priority = 2
+starts = 600
+skip_mj = true
+
+[[job]]
+name = "P2-small-n"
+table = "crc_400"
+n = "10-80"
+priority = 2
+starts = 600
+skip_mj = true
+
+[[job]]
+name = "P2-small-n"
+table = "crc_500"
+n = "10-80"
+priority = 2
+starts = 600
+skip_mj = true
+
+[[job]]
+name = "P2-small-n"
+table = "crc_600"
+n = "10-80"
+priority = 2
+starts = 600
+skip_mj = true
+
+[[job]]
+name = "P2-small-n"
+table = "crc_700"
+n = "10-80"
+priority = 2
+starts = 600
+skip_mj = true
+
+[[job]]
+name = "P2-small-n"
+table = "crc_800"
+n = "10-80"
+priority = 2
+starts = 600
+skip_mj = true
+
+[[job]]
+name = "P2-small-n"
+table = "csc"
+n = "10-80"
+priority = 2
+starts = 600
+skip_mj = true
+
+[[job]]
+name = "P2-small-n"
+table = "crt"
+n = "10-80"
+priority = 2
+starts = 600
+skip_mj = true
+
+[[job]]
+name = "P2-small-n"
+table = "ccq"
+n = "10-80"
+priority = 2
+starts = 600
+skip_mj = true
+
+[[job]]
+name = "P3-mid-n"
+table = "crc_100"
+n = "81-200"
+priority = 3
+starts = 300
+skip_mj = true
+
+[[job]]
+name = "P3-mid-n"
+table = "crc_200"
+n = "81-200"
+priority = 3
+starts = 300
+skip_mj = true
+
+[[job]]
+name = "P3-mid-n"
+table = "crc_300"
+n = "81-200"
+priority = 3
+starts = 300
+skip_mj = true
+
+[[job]]
+name = "P3-mid-n"
+table = "crc_400"
+n = "81-200"
+priority = 3
+starts = 300
+skip_mj = true
+
+[[job]]
+name = "P3-mid-n"
+table = "crc_500"
+n = "81-200"
+priority = 3
+starts = 300
+skip_mj = true
+
+[[job]]
+name = "P3-mid-n"
+table = "crc_600"
+n = "81-200"
+priority = 3
+starts = 300
+skip_mj = true
+
+[[job]]
+name = "P3-mid-n"
+table = "crc_700"
+n = "81-200"
+priority = 3
+starts = 300
+skip_mj = true
+
+[[job]]
+name = "P3-mid-n"
+table = "crc_800"
+n = "81-200"
+priority = 3
+starts = 300
+skip_mj = true
+
+[[job]]
+name = "P3-mid-n"
+table = "csc"
+n = "81-200"
+priority = 3
+starts = 300
+skip_mj = true
+
+[[job]]
+name = "P3-mid-n"
+table = "crt"
+n = "81-200"
+priority = 3
+starts = 300
+skip_mj = true
+
+[[job]]
+name = "P3-mid-n"
+table = "ccq"
+n = "81-200"
+priority = 3
+starts = 300
+skip_mj = true
+
+[[job]]
+name = "P4-confirm-mj"
+table = "crc_100"
+n = "10-200"
+priority = 4
+starts = 64
+only_mj = true
+idle_only = true
+
+[[job]]
+name = "P4-confirm-mj"
+table = "crc_200"
+n = "10-200"
+priority = 4
+starts = 64
+only_mj = true
+idle_only = true
+
+[[job]]
+name = "P4-confirm-mj"
+table = "crc_300"
+n = "10-200"
+priority = 4
+starts = 64
+only_mj = true
+idle_only = true
+
+[[job]]
+name = "P4-confirm-mj"
+table = "crc_400"
+n = "10-200"
+priority = 4
+starts = 64
+only_mj = true
+idle_only = true
+
+[[job]]
+name = "P4-confirm-mj"
+table = "crc_500"
+n = "10-200"
+priority = 4
+starts = 64
+only_mj = true
+idle_only = true
+
+[[job]]
+name = "P4-confirm-mj"
+table = "crc_600"
+n = "10-200"
+priority = 4
+starts = 64
+only_mj = true
+idle_only = true
+
+[[job]]
+name = "P4-confirm-mj"
+table = "crc_700"
+n = "10-200"
+priority = 4
+starts = 64
+only_mj = true
+idle_only = true
+
+[[job]]
+name = "P4-confirm-mj"
+table = "crc_800"
+n = "10-200"
+priority = 4
+starts = 64
+only_mj = true
+idle_only = true
+
+[[job]]
+name = "P4-confirm-mj"
+table = "csc"
+n = "10-200"
+priority = 4
+starts = 64
+only_mj = true
+idle_only = true
+
+[[job]]
+name = "P4-confirm-mj"
+table = "crt"
+n = "10-200"
+priority = 4
+starts = 64
+only_mj = true
+idle_only = true
+
+[[job]]
+name = "P4-confirm-mj"
+table = "ccq"
+n = "10-200"
+priority = 4
+starts = 64
+only_mj = true
+idle_only = true

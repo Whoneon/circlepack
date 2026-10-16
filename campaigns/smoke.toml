@@ -1,0 +1,44 @@
+# Tiny campaign for smoke-testing the driver (a few minutes).
+#   python -m circlepack campaign run campaigns/smoke.toml --dir /tmp/cp-smoke
+# The [[override]] lowers the Packomania reference of crc_300 n=12 to force a
+# simulated RECORD CANDIDATE; it does not touch the real data.
+
+[campaign]
+name = "smoke"
+unit_seconds = 20
+unit_max_starts = 8
+min_workers = 2
+max_workers = 4
+adapt_every = 20
+report_every = 30
+stop_grace = 30
+
+[references]
+# Optional (see weekend.toml); Packomania references come from the records cache.
+# packomania_dir = "path/to/packomania-csv"
+# mj_manifest = "path/to/moki-julio-circle-packing/MANIFEST.csv"
+
+[[override]]
+table = "crc_300"
+n = 12
+packomania = "0.070000000000"
+
+[[job]]
+table = "chp"
+n = "10-12"
+priority = 1
+starts = 160
+skip_mj = true
+
+[[job]]
+table = "crc_300"
+n = "12,22"
+priority = 2
+starts = 64
+skip_mj = true
+
+[[job]]
+table = "cno"
+n = "10"
+priority = 3
+starts = 64

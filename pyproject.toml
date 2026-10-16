@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "circlepack"
+version = "0.1.0"
+description = "Pack n equal circles of maximal radius in a fixed convex container, with an exact rational verifier (Packomania convention)"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Whoneon" }]
+keywords = ["circle packing", "packing", "optimization", "soft-to-rigid", "basin hopping",
+            "sequential linear programming", "exact verification", "Packomania"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "scipy>=1.10"]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.urls]
+Homepage = "https://github.com/Whoneon/circlepack"
+Documentation = "https://github.com/Whoneon/circlepack#readme"
+Issues = "https://github.com/Whoneon/circlepack/issues"
+Changelog = "https://github.com/Whoneon/circlepack/blob/main/CHANGELOG.md"
+
+[project.scripts]
+circlepack = "circlepack.cli:main"
+
+[tool.setuptools]
+packages = ["circlepack"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: longer optimisation tests",
+           "records(*tables): needs Packomania tables in the local cache (skipped otherwise)"]

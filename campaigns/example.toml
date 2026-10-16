@@ -1,0 +1,37 @@
+# Minimal example campaign: a few small targets, a few minutes.
+#
+#   circlepack records fetch --tables square,heptagon      # references (once)
+#   circlepack campaign plan campaigns/example.toml        # targets and estimated hours
+#   circlepack campaign run  campaigns/example.toml        # foreground; Ctrl-C = graceful stop
+#   circlepack campaign status runs/example
+#
+# Relative paths are resolved against the directory of this file. Without the
+# cached tables the campaign still runs; targets just have no reference
+# ("NO REFERENCE") and "max" in an n range cannot be resolved.
+
+[campaign]
+name = "example"
+dir = "../runs/example"          # <repo>/runs/example (git-ignored); --dir overrides
+unit_seconds = 60
+min_workers = 1
+max_workers = 4
+report_every = 120
+
+[references]
+# Optional overrides / extra references (see campaigns/README.md):
+# packomania_dir = "path/to/packomania-csv"                      # <code>.csv overrides the cache
+# mj_manifest = "path/to/moki-julio-circle-packing/MANIFEST.csv"  # Moki & Julio claims
+
+[[job]]
+name = "square"
+table = "csq"
+n = "10-14"
+priority = 1
+starts = 32
+
+[[job]]
+name = "heptagon"
+table = "chp"
+n = "10,11"
+priority = 2
+starts = 32
