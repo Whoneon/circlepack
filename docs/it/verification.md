@@ -35,6 +35,16 @@ quadrante, semicerchio) i semipiani e i dischi sono ricostruiti esattamente dall
 spec (poligoni regolari, i cui vertici sono irrazionali) si usano le primitive
 float memorizzate e l'output riporta `primitives from stored float primitives`.
 
+**Parametri decimali.** I valori della `spec` sono letti dal JSON come double
+binari e convertiti con `Fraction(valore)`: la verifica usa cioè il valore esatto
+del double memorizzato, non il decimale scritto a mano. Un rettangolo `1 x 0.1`
+viene verificato con altezza `Fraction(0.1) = 0.1000000000000000055511151231257827...`
+e `1 x 0.3` con `0.2999999999999999888977697537484345...`. La differenza è al più
+un'unità nell'ultima cifra (relativa `2^-53`, circa `1.1e-16`), cinque ordini di
+grandezza sotto l'`eps = 1e-12` di cui viene ridotto il raggio: per il contenitore
+con i parametri decimali esatti la stessa conclusione vale con `eps` aumentato di
+meno di `1e-16`.
+
 ## Che cosa viene dimostrato
 
 - VALID in modalità esatta dimostra che cerchi di raggio `r - eps` con centro nei

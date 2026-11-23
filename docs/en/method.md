@@ -112,6 +112,21 @@ restore conservatism. Hence the true feasible radius after a step is never below
 the LP prediction. A step is nevertheless accepted only if the exact feasible
 radius increases.
 
+*Why `delta^2 / |x - c|` is the right constant.* Write `y = x - c`, `u = y / |y|`
+and let `dx` be the step. Since `sqrt(a^2 + b) <= a + b / (2a)` for `a > 0`,
+
+    |y + dx| = sqrt(|y|^2 + 2 y.dx + |dx|^2) <= |y| + u.dx + |dx|^2 / (2 |y|).
+
+The trust region is the box `|dx|_inf <= delta`, so in 2-D `|dx|^2 <= 2 delta^2`
+and the remainder is at most `delta^2 / |y|`, for every step in the box (no
+restriction on `|y|`). The constant is sharp: for `|y| >> delta` a box corner
+orthogonal to `y` attains it up to higher-order terms
+(`tests/test_sparse_polish.py::test_disk_curvature_bound_rigorous_and_tight`).
+When the centre is closer than `delta / sqrt(2)` to the disk centre (including the
+degenerate case `y = 0`, where `u` is undefined) the row uses the direction-free
+bound `|y + dx| <= |y| + sqrt(2) delta` instead, which is then the smaller
+remainder.
+
 The trust region doubles when the step bounds carry non-zero reduced costs (the
 box limits the gain) and shrinks by 4 when the LP optimum is interior
 (Newton-like regime; this keeps the LP tolerances, relative to `delta`, from

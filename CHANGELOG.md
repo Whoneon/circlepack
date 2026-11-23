@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+- Sparse SLP polish: a circle whose centre coincides with the centre of a disk
+  wall (e.g. one circle in a circle) produced an infinite right-hand side and an
+  infeasible LP. Centres closer than `delta / sqrt(2)` to a disk centre now use the
+  direction-free bound `|y + dx| <= |y| + sqrt(2) delta`, which is also the smaller
+  remainder there.
+
+### Documentation
+- Method: proof that the disk curvature correction `delta^2 / |x - c|` is a
+  rigorous and sharp bound for the box trust region (English and Italian).
+- Verification: decimal container parameters are checked as the stored binary
+  doubles; effect quantified (below `1e-16`, far under `eps`).
+
+### Tests
+- Adversarial test of the disk curvature bound (box corners, orthogonal steps,
+  `|y| / delta` from 0.75 to 1e4) including near-sharpness.
+- SLP disk rows with the circle exactly at, or very near, the disk centre.
+
 ## [0.1.0] - 2026-10-17
 
 Initial release.

@@ -84,6 +84,48 @@ def test_slp_rows_are_first_order_and_conservative(container):
         assert np.max(exact - linear) < 4 * delta ** 2 / r  # and first-order accurate
 
 
+@pytest.mark.parametrize("ratio", [0.75, 1.0, 2.0, 10.0, 1e2, 1e4])
+def test_disk_curvature_bound_rigorous_and_tight(ratio):
+    """|y + dx| <= |y| + u.dx + delta^2/|y| for every dx in the box |dx|_inf <= delta.
+
+    Proof: |y + dx| = sqrt(|y|^2 + 2 y.dx + |dx|^2) <= |y| + u.dx + |dx|^2 / (2|y|)
+    (sqrt(a^2 + b) <= a + b / (2a)), and |dx|^2 <= 2 delta^2 in the 2-D box.
+    The bound is attained asymptotically at a box corner orthogonal to y.
+    """
+    rng = np.random.default_rng(11)
+    delta = 1.0
+    worst = 0.0
+    for ang in np.linspace(0, 2 * np.pi, 64, endpoint=False):
+        y = ratio * delta * np.array([np.cos(ang), np.sin(ang)])
+        u = y / np.linalg.norm(y)
+        steps = np.vstack([np.array([[s, t] for s in (-1, 1) for t in (-1, 1)]) * delta,
+                           rng.uniform(-delta, delta, size=(200, 2))])
+        rem = np.linalg.norm(y + steps, axis=1) - np.linalg.norm(y) - steps @ u
+        bound = delta ** 2 / np.linalg.norm(y)
+        assert np.all(rem <= bound * (1 + 1e-12) + 1e-15)
+        worst = max(worst, rem.max() / bound)
+    if ratio >= 1e2:
+        assert worst > 0.99          # nearly tight: the constant cannot be lowered
+
+
+@pytest.mark.parametrize("offset", [0.0, 1e-9, 1e-4])
+def test_slp_disk_row_with_centre_at_disk_centre(offset):
+    """A circle (almost) at the centre of a disk wall: rows stay finite and conservative."""
+    c = circle()
+    X = np.array([[offset, 0.0]])
+    r = 1.0 - offset - 1e-3
+    delta = 1e-2
+    A, s, info = slp_rows(X, r, c, reach=10.0, curvature=delta ** 2)
+    assert np.all(np.isfinite(s)) and np.all(np.isfinite(A.toarray()))
+    rng = np.random.default_rng(12)
+    for _ in range(200):
+        step = rng.uniform(-delta, delta, size=2)
+        dr = rng.uniform(-delta, delta)
+        exact = 1.0 - np.linalg.norm(X[0] + step) - (r + dr)
+        linear = s - A @ np.concatenate([step, [dr]])
+        assert exact >= linear[0] - 1e-13
+
+
 def _hex7():
     a = np.linspace(0, 2 * np.pi, 7)[:-1]
     return np.vstack([[0, 0], (2 / 3) * np.stack([np.cos(a), np.sin(a)], 1)])

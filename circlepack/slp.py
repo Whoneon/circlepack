@@ -117,11 +117,20 @@ def slp_rows(X: np.ndarray, r: float, container: Container, reach: float, curvat
         if di.size:
             k = di.size
             row = m + np.arange(k)
-            V = Dc[di, dk] / np.maximum(dc[di, dk], 1e-300)[:, None]
+            dck = dc[di, dk]
+            V = Dc[di, dk] / np.maximum(dck, 1e-300)[:, None]
+            # Tangent row: |y + dx| <= |y| + v.dx + |dx|^2 / (2|y|) <= |y| + v.dx + delta^2/|y|
+            # (|dx|^2 <= 2 delta^2 in the box). It degenerates when the centre is (almost)
+            # at the disk centre; there use the direction-free bound |y + dx| <= |y| + sqrt(2) delta,
+            # which is the smaller of the two remainders whenever |y| < delta / sqrt(2).
+            delta = np.sqrt(curvature)
+            near = dck * _SQRT2 < delta if curvature > 0 else dck == 0.0
+            V[near] = 0.0
+            corr = np.where(near, _SQRT2 * delta, curvature / np.maximum(dck, 1e-300))
             rows += [row] * 3
             cols += [2 * di, 2 * di + 1, np.full(k, 2 * n)]
             vals += [V[:, 0], V[:, 1], np.ones(k)]
-            rhs.append(S[di, dk] - curvature / dc[di, dk])
+            rhs.append(S[di, dk] - corr)
             meta.append((np.full(k, 2, np.int8), di, dk, dc[di, dk]))
             m += k
     if m == 0:

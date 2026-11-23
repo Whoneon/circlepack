@@ -118,6 +118,22 @@ conservatività. Perciò il vero raggio ammissibile dopo un passo non è mai
 inferiore alla previsione dell'LP. Un passo è comunque accettato solo se il
 raggio ammissibile esatto aumenta.
 
+*Perché la costante giusta è `delta^2 / |x - c|`.* Si ponga `y = x - c`,
+`u = y / |y|` e sia `dx` il passo. Poiché `sqrt(a^2 + b) <= a + b / (2a)` per
+`a > 0`,
+
+    |y + dx| = sqrt(|y|^2 + 2 y.dx + |dx|^2) <= |y| + u.dx + |dx|^2 / (2 |y|).
+
+La regione di fiducia è il quadrato `|dx|_inf <= delta`, quindi in 2-D
+`|dx|^2 <= 2 delta^2` e il resto vale al più `delta^2 / |y|`, per ogni passo nel
+quadrato (senza restrizioni su `|y|`). La costante è ottimale: per `|y| >> delta`
+un vertice del quadrato ortogonale a `y` la raggiunge a meno di termini di ordine
+superiore (`tests/test_sparse_polish.py::test_disk_curvature_bound_rigorous_and_tight`).
+Quando il centro dista meno di `delta / sqrt(2)` dal centro del disco (compreso il
+caso degenere `y = 0`, in cui `u` non è definito) la riga usa invece il limite
+indipendente dalla direzione `|y + dx| <= |y| + sqrt(2) delta`, che in quel
+caso è il resto più piccolo.
+
 La regione di fiducia raddoppia quando i limiti del passo hanno costi ridotti non
 nulli (la scatola limita il guadagno) e si riduce di 4 quando l'ottimo dell'LP è
 interno (regime tipo Newton; questo evita che le tolleranze dell'LP, relative a

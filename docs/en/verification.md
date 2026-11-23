@@ -35,6 +35,16 @@ check refers to the true container. For other specs (regular polygons, whose
 vertices are irrational) the stored float primitives are used and the output
 says `primitives from stored float primitives`.
 
+**Decimal parameters.** Spec values are read from JSON as binary doubles and
+converted with `Fraction(value)`, i.e. the check uses the exact value of the
+stored double, not the decimal written by a human: a rectangle `1 x 0.1` is
+checked with height `Fraction(0.1) = 0.1000000000000000055511151231257827...`
+and `1 x 0.3` with `0.2999999999999999888977697537484345...`. The difference is at
+most one unit in the last place (relative `2^-53`, about `1.1e-16`), five orders
+of magnitude below the default `eps = 1e-12` by which the radius is reduced: for the
+container with the exact decimal parameters the same conclusion holds with `eps`
+enlarged by less than `1e-16`.
+
 ## What is proved
 
 - VALID in exact mode proves that circles of radius `r - eps` centred at the
