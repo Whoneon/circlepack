@@ -13,6 +13,6 @@ from .parallel import run_many  # noqa: E402
 from .polish import polish  # noqa: E402
 from .energy import feasible_radius  # noqa: E402
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __all__ = ["Container", "make_container", "SearchConfig", "StartResult", "run_start",
            "run_many", "polish", "feasible_radius", "__version__"]

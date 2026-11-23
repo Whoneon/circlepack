@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-23
+
 ### Fixed
 - Sparse SLP polish: a circle whose centre coincides with the centre of a disk
   wall (e.g. one circle in a circle) produced an infinite right-hand side and an

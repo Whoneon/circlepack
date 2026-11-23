@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "circlepack"
-version = "0.1.0"
+version = "0.1.1"
 description = "Pack n equal circles of maximal radius in a fixed convex container, with an exact rational verifier (Packomania convention)"
 readme = "README.md"
 license = "MIT"
